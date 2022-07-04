@@ -2,8 +2,10 @@ use rayon::prelude::*;
 
 pub fn stream_triad(a : &mut [f64], b : &[f64], c : &[f64], scalar : f64){
 
-    a.par_iter_mut().zip(b.par_iter()).zip(c.par_iter()).for_each(|((ai,bi),ci)|{
-        *ai =  bi + scalar*ci;
+    a.par_chunks_mut(1024).zip(b.par_chunks(1024)).zip(c.par_chunks(1024)).for_each(|((ax,bx),cx)|{
+        for ((ai,bi),ci) in ax.iter_mut().zip(bx.iter()).zip(cx.iter()){
+            *ai = bi + scalar*ci;
+        }
     });
 }
 
