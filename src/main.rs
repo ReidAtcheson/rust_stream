@@ -1,7 +1,10 @@
+use rayon::prelude::*;
+
 pub fn stream_triad(a : &mut [f64], b : &[f64], c : &[f64], scalar : f64){
-    for ((ai,bi),ci) in a.iter_mut().zip(b.iter()).zip(c.iter()){
+
+    a.par_iter_mut().zip(b.par_iter()).zip(c.par_iter()).for_each(|((ai,bi),ci)|{
         *ai =  bi + scalar*ci;
-    }
+    });
 }
 
 pub fn percentiles(a : &Vec<f64>) -> (f64,f64,f64,f64,f64) {
