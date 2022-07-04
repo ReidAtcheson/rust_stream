@@ -22,11 +22,11 @@ fn main() {
     use rand::SeedableRng;
     use rand_chacha::ChaCha20Rng;
 
-    let maxsize = 100000;
+    let maxsize = 10000000;
     let nbytes = std::mem::size_of::<f64>() * maxsize;
     let nreads = 2 * nbytes;
     let nwrites = 1 * nbytes;
-    let nsamples = 10000;
+    let nsamples = 1000;
     let seed : u64 = 19140148;
     let mut times = Vec::<f64>::new();
     for _ in 0..nsamples{
