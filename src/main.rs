@@ -1,10 +1,20 @@
 use rayon::prelude::*;
 
 pub fn stream_triad(a : &mut [f64], b : &[f64], c : &[f64], scalar : f64){
-
-    a.par_iter_mut().zip(b.par_iter()).zip(c.par_iter()).for_each(|((ai,bi),ci)|{
-        *ai =  bi + scalar*ci;
-    });
+    let m = a.len();
+    if m>10000{
+        let (a0,a1) = a.split_at_mut(m/2);
+        let (b0,b1) = b.split_at(m/2);
+        let (c0,c1) = c.split_at(m/2);
+        rayon::join(
+            ||stream_triad(a0,b0,c0,scalar),
+            ||stream_triad(a1,b1,c1,scalar));
+    }
+    else{
+        for ((ai,bi),ci) in a.iter_mut().zip(b.iter()).zip(c.iter()){
+            *ai = bi + scalar*ci;
+        }
+    }
 }
 
 pub fn percentiles(a : &Vec<f64>) -> (f64,f64,f64,f64,f64) {
