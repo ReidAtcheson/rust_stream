@@ -17,7 +17,7 @@ pub fn stream_triad(a : &mut [f64], b : &[f64], c : &[f64], scalar : f64){
     }
 }
 
-pub fn percentiles(a : &Vec<f64>) -> (f64,f64,f64,f64,f64) {
+pub fn percentiles(a : &Vec<f64>) -> (f64,f64,f64,f64,f64,f64) {
     let mut b = a.clone();
     b.sort_by(|x,y|x.partial_cmp(y).unwrap());
     let m = a.len();
@@ -26,7 +26,7 @@ pub fn percentiles(a : &Vec<f64>) -> (f64,f64,f64,f64,f64) {
     let i50 = 50*m / 100;
     let i95 = 95*m / 100;
     let i99 = 99*m / 100;
-    (b[i01],b[i05],b[i50],b[i95],b[i99])
+    (b[i01],b[i05],b[i50],b[i95],b[i99],*b.last().unwrap())
 }
 
 fn main() {
@@ -56,8 +56,8 @@ fn main() {
         let nwrites_gb = (nwrites as f64) / (1024.0 * 1024.0 * 1024.0);
         times.push(  (nreads_gb + nwrites_gb) / start.elapsed().as_secs_f64() );
     }    
-    let (p01,p05,p50,p95,p99) = percentiles(&times);
-    println!("p01: {}, p05: {}, p50: {}, p95: {}, p99: {}",p01,p05,p50,p95,p99);
+    let (p01,p05,p50,p95,p99,max) = percentiles(&times);
+    println!("p01: {}, p05: {}, p50: {}, p95: {}, p99: {}, max: {}",p01,p05,p50,p95,p99,max);
 }
 
 
